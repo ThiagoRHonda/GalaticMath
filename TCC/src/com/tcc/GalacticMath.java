@@ -132,6 +132,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			frameCount = 0;
 		}
 		
+		//Dependendo do estado de jogo é atualizado
 		if(gamestate == GAMEMENU) {
 			g2d.setFont(new Font("Verdana", Font.BOLD, 36));
 			g2d.setColor(Color.BLACK);
