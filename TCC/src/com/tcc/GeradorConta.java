@@ -2,7 +2,7 @@ package com.tcc;
 import java.awt.Graphics;
 import java.util.Random;
 import java.util.Scanner;
-import java.applet.*;
+//import java.applet.*;
 
 
 public class GeradorConta {
@@ -14,7 +14,6 @@ public class GeradorConta {
 	private int x = 0;
 	private int c = 0;
 	private boolean s;
-	private String y;
 	private Scanner input = new Scanner(System.in);
 	Graphics g2d;
 	
