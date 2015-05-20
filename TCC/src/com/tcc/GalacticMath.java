@@ -42,7 +42,8 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	long collisionTimer = 0;
 		
 	//Define os objetos do game
-	Sprite nave, enemy;
+	Sprite nave;
+	Sprite enemy;
 	ImageEntity background, barFrame;
 	ImageEntity[] barImage = new ImageEntity[2];
 	Sprite[] bullet = new Sprite[bullets], ebullet = new Sprite[bullets];
@@ -53,6 +54,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	
 	//Medidor de vida
 	int vida = 20;
+	int evida = 25;
 	int score = 0;
 	int highscore = 0;
 	int gamestate = GAMEMENU;
@@ -88,11 +90,12 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		nave.setAlive(true);
 		
 		//Carrega o inimigo
+		
 		enemy = new Sprite(this, g2d);
 		enemy.load("enemyship2.png");
 		enemy.setPosition(new Point2D(centerx, 20));
 		enemy.setAlive(true);
-		
+			
 		//Carrega as bullets
 		for(int n =0; n<bullets; n++) {
 			bullet[n] = new Sprite(this, g2d);
@@ -112,9 +115,8 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		barFrame.load("barframe.png");
 		barImage[0] = new ImageEntity(this);
 		barImage[0].load("bar_health.png");
-		
-		//shoot.load("shoot.au");
-		//explode.load("exploade.au");
+		barImage[1] = new ImageEntity(this);
+		barImage[1].load("bar_shield.png");
 		
 		conta = gSoma();
 		
@@ -186,12 +188,14 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			else if(nave.state() == sprite_exploding)
 				g2d.drawString("Estado: EXPLODINDO", 5, 85);
 			
+			
 			if(enemy.state() == sprite_normal)
 				g2d.drawString("Estado do Inimigo: NORMAL", 5, 100);
 			else if(enemy.state() == sprite_collided)
 				g2d.drawString("Estado do Inimigo: COLIDIDO", 5, 100);
 			else if(enemy.state() == sprite_exploding)
 				g2d.drawString("Estado do Inimigo: EXPLODINDO", 5, 100);
+			
 			
 			//Desenha o medidor de vida
 			g2d.drawImage(barFrame.getImage(), screenWidth - 132, 18, this);
@@ -200,8 +204,21 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 				g2d.drawImage(barImage[0].getImage(), dx, 20, this);
 			}
 			
+			g2d.drawImage(barFrame.getImage(), screenWidth - 132, 38, this);
+			for(int n= 0; n < evida; n++) {
+				int dx = screenWidth - 130 + n * 4;
+				g2d.drawImage(barImage[1].getImage(), dx, 40, this);
+			}
+			
+		
 			if(vida <= 0) {
 				gamestate = GAMEOVER;
+			} else if(evida <=0) {
+				enemy.setAlive(false);
+				enemy.load("enemyship3.png");
+				enemy.setPosition(new Point2D(centerx, 20));
+				enemy.setAlive(true);
+				evida = 25;
 			}
 			
 		} else if(gamestate == GAMEOVER) {
@@ -211,6 +228,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			g2d.setFont(new Font("Arial", Font.CENTER_BASELINE, 24));
 			g2d.setColor(Color.ORANGE);
 			g2d.drawString("Pressione ESPAÇO para recomeçar", 260, 500);
+			stop();
 		}
 		
 		
@@ -226,7 +244,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		nave.draw();
 		enemy.setFaceAngle(180);
 		enemy.transform();
-		enemy.draw();
+		enemy.draw();	
 	}
 	
 	//drawBullets chamado pelo update do Applet
@@ -300,7 +318,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	
 	//Move a anima os objetos no game
 	private void gameUpdate() {
-		checkInput();
+		//checkInput();
 		updateShip();
 		updateBullets();
 		if(collisionTesting) {
@@ -395,6 +413,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			if(bullet[n].alive()) {
 				if(enemy.collidesWith(bullet[n])) {
 					enemy.setState(sprite_collided);
+					evida -=5;
 					bullet[n].setAlive(false);
 					explode.play();
 				}
@@ -429,7 +448,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	public void handleBulletCollisions() {
 		for(int n = 0; n<bullets; n++) {
 			if(bullet[n].state() == sprite_collided) {
-				//nada ainda
+				bullet[n].setAlive(false);
 			}
 		}
 	}
@@ -448,7 +467,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		}
 	}
 	
-	//Processa as teclas pressionadas
+	/*Processa as teclas pressionadas
 	public void checkInput() {
 		if(keyLeft) {
 			//Seta esquerda rotaciona a nave em 5 graus
@@ -466,7 +485,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			applyThrust();
 		}
 		
-	}
+	}*/
 	
 	//Eventos de key listener
 	public void keyTyped(KeyEvent k) {}
@@ -533,19 +552,20 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			break;
 		case KeyEvent.VK_ENTER:
 			if(letra == "") {
-				conta = gSoma();
+				checkScore();
 				tamanho = conta.length();
 				letra = "";
 				enemyFireBullet();
 				shoot.play();
 			} else if(Integer.valueOf(letra) == resultado) {
-				conta = gSoma();
+				checkScore();
 				tamanho = conta.length();
 				letra = "";
 				fireBullet();
+				score += 1;
 				shoot.play();
 			} else {
-				conta = gSoma();
+				checkScore();
 				tamanho = conta.length();
 				letra = "";
 				enemyFireBullet();
@@ -555,6 +575,10 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			if(gamestate == GAMEMENU) {
 				gamestate = GAMERUNNING;
+			} else if(gamestate == GAMEOVER) {
+				gamestate = GAMERUNNING;
+				start();
+				run();
 			}
 			
 			break;
@@ -659,8 +683,31 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		
 		return conta;
 	}
+	
+	public String gSub() {
+		int a, b;
+		String conta;
 		
-			
+		a = rand.nextInt(21); b = rand.nextInt(21);
+		
+		if(a > b) {
+			resultado = a - b;
+			conta = a + " - " + b + " = ";
+		} else {
+			resultado = b - a;
+			conta = b + " - " + a + " = ";
+		}
+		
+		return conta;
+	}
+		
+	public void checkScore() {
+		if(score < 4) {
+			conta = gSoma();
+		} else {
+			conta = gSub();
+		}
+	}
 	//GeradorConta gc = new GeradorConta();
 	/*int g = 0;
 		
