@@ -55,7 +55,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	//Medidor de vida
 	int vida = 20;
 	int evida = 25;
-	int score = 0;
+	int score = 1;
 	int highscore = 0;
 	int gamestate = GAMEMENU;
 	
@@ -118,7 +118,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		barImage[1] = new ImageEntity(this);
 		barImage[1].load("bar_shield.png");
 		
-		conta = gSoma();
+		checkScore();
 		
 		addKeyListener(this);
 		
@@ -702,7 +702,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	}
 		
 	public void checkScore() {
-		if(score < 4) {
+		if(score < 5) {
 			conta = gSoma();
 		} else {
 			conta = gSub();
