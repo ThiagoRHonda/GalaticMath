@@ -162,6 +162,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			drawExplosions();
 			
 			//Desenha os status na tela
+			g2d.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 			g2d.setColor(Color.WHITE);
 			g2d.drawString("FPS: " + frameRate, 5, 10);
 			long x = Math.round(nave.position().X());
@@ -171,15 +172,6 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			g2d.drawString("Face Angle: " + Math.round(nave.faceAngle()), 5, 55);
 			g2d.drawString(conta, 5, 70);
 			g2d.drawString(letra, 65, 70);
-			
-			g2d.setFont(new Font("Verdana", Font.BOLD, 24));
-			g2d.setColor(Color.WHITE);
-			g2d.drawString(conta, centerx - tamanho/2, centery);
-			g2d.setFont(new Font("Verdana", Font.BOLD, 24));
-			g2d.setColor(Color.WHITE);
-			g2d.drawString(letra, centerx, 535);
-			
-			
 			
 			if(nave.state() == sprite_normal)
 				g2d.drawString("Estado: NORMAL", 5, 85);
@@ -196,7 +188,14 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			else if(enemy.state() == sprite_exploding)
 				g2d.drawString("Estado do Inimigo: EXPLODINDO", 5, 100);
 			
+			g2d.setFont(new Font("Verdana", Font.BOLD, 24));
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(conta, centerx - tamanho/2, centery);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 24));
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(letra, centerx, 535);
 			
+
 			//Desenha o medidor de vida
 			g2d.drawImage(barFrame.getImage(), screenWidth - 132, 18, this);
 			for(int n= 0; n < vida; n++) {
@@ -582,18 +581,11 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			}
 			
 			break;
+		
+		case KeyEvent.VK_BACK_SPACE:
+			letra = "";
+			break;
 		}
-	}
-	
-	public void applyThrust() {
-		//Seta para cima adiciona aceleracao na nave
-		nave.setMoveAngle(nave.faceAngle() - 90);
-		//calcula a velocidade de x e y dependendo da velocidade
-		double velx = nave.velocity().X();
-		velx += calcAngleMoveX(nave.moveAngle()) * acceleration;
-		double vely = nave.velocity().Y();
-		vely += calcAngleMoveY(nave.moveAngle()) * acceleration;
-		nave.setVelocity(new Point2D(velx, vely));
 	}
 	
 	public void fireBullet() {
@@ -700,14 +692,61 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		
 		return conta;
 	}
+	
+	public String gDiv() {
+		int a, b, r;
+		String conta2;
+		boolean s;
+		
+		a = rand.nextInt(9)+1; b = rand.nextInt(10)+1;
+		r = a * b;
+		s = rand.nextBoolean();
+		
+		if(s == true) {
+			resultado = r / b;
+			conta2 = r + " / " + b + " = ";
+		} else {
+			resultado = r / a;
+			conta2 = r + " / " + a + " = ";
+		}
+		
+		return conta2;
+	}
+	
+	public String gMult() {
+		int a, b;
+		String conta2;
+		boolean s;
+		
+		a = rand.nextInt(9)+1; b = rand.nextInt(10)+1;
+		s = rand.nextBoolean();
+		
+		if(s == true) {
+			resultado = a * b;
+			conta2 = a + " x " + b + " = ";
+		} else {
+			resultado = b * a;
+			conta2 = b + " x " + a + " = ";
+		}
+		
+		return conta2;
+	}
 		
 	public void checkScore() {
-		if(score < 5) {
+		int c;
+		c = rand.nextInt(4);
+		
+		if(c == 0) {
 			conta = gSoma();
-		} else {
+		} else if(c == 1) {
 			conta = gSub();
+		} else if(c == 2) {
+			conta = gDiv();
+		} else if(c == 3) {
+			conta = gMult();
 		}
 	}
+	
 	//GeradorConta gc = new GeradorConta();
 	/*int g = 0;
 		
