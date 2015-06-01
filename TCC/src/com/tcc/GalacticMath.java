@@ -51,6 +51,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	int currentBullet = 0;
 	String letra = "", conta = "";
 	int resultado = 0, tamanho= 0;
+	GeradorConta gc = new GeradorConta();
 	
 	//Medidor de vida
 	int vida = 20;
@@ -70,7 +71,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	boolean keyDown, keyUp, keyLeft, keyRight, keyFire, keyNum;
 	
 	//Contador de frame
-	int frameCount = 0, frameRate = 0;
+	int frameCount = 0, frameRate = 0, fps = 60;
 	long startTime = System.currentTimeMillis();
 	
 	//Evento de iniciacao do applet
@@ -133,6 +134,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			frameRate = frameCount;
 			frameCount = 0;
 		}
+		
 		
 		//Dependendo do estado de jogo é atualizado
 		if(gamestate == GAMEMENU) {
@@ -213,6 +215,13 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			if(vida <= 0) {
 				gamestate = GAMEOVER;
 			} else if(evida <=0) {
+				score++;
+				enemy.setAlive(false);
+				enemy.load("enemyship2.png");
+				enemy.setPosition(new Point2D(centerx, 20));
+				enemy.setAlive(true);
+				evida = 25;
+			} else if(score % 5 == 0 && score > 0) {
 				enemy.setAlive(false);
 				enemy.load("enemyship3.png");
 				enemy.setPosition(new Point2D(centerx, 20));
@@ -305,7 +314,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		//Continua enquanto o thread estiver ativo
 		while(t == gameloop) {
 			try {
-				Thread.sleep(17);
+				Thread.sleep(1000/fps);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
@@ -552,20 +561,25 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		case KeyEvent.VK_ENTER:
 			if(letra == "") {
 				checkScore();
-				tamanho = conta.length();
 				letra = "";
 				enemyFireBullet();
 				shoot.play();
 			} else if(Integer.valueOf(letra) == resultado) {
 				checkScore();
-				tamanho = conta.length();
 				letra = "";
 				fireBullet();
-				score += 1;
+				
+				if(score == 5) {
+					highscore++;
+				} else if(score == 10) {
+					highscore++;
+				} else if(score == 15) {
+					highscore++;
+				}
 				shoot.play();
+
 			} else {
 				checkScore();
-				tamanho = conta.length();
 				letra = "";
 				enemyFireBullet();
 				shoot.play();
@@ -575,9 +589,8 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			if(gamestate == GAMEMENU) {
 				gamestate = GAMERUNNING;
 			} else if(gamestate == GAMEOVER) {
-				gamestate = GAMERUNNING;
-				start();
-				run();
+				
+
 			}
 			
 			break;
@@ -733,10 +746,8 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 	}
 		
 	public void checkScore() {
-		int c;
-		c = rand.nextInt(4);
 		
-		if(c == 0) {
+		/*if(c == 0) {
 			conta = gSoma();
 		} else if(c == 1) {
 			conta = gSub();
@@ -744,28 +755,11 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 			conta = gDiv();
 		} else if(c == 3) {
 			conta = gMult();
-		}
+		}*/
+		conta = gc.checkScore(highscore);
+		resultado = gc.result();
+		
 	}
-	
-	//GeradorConta gc = new GeradorConta();
-	/*int g = 0;
-		
-	while(g < 10) {
-		
-		if(gc.gSoma()) {
-			System.out.println("Esta correto!");
-		} else {
-			System.out.println("Esta incorreto!");
-		}
-		
-		
-		if(gc.gMenos()) {
-			System.out.println("Esta correto!");
-		} else {
-			System.out.println("Esta incorreto!");
-		}
-	
-		g++;
-	}*/
+
 
  }
