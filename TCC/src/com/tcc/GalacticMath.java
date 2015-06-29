@@ -87,7 +87,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		//Carrega a nave
 		nave = new Sprite(this, g2d);
 		nave.load("spaceship.png");
-		nave.setPosition(new Point2D(centerx, 550));
+		nave.setPosition(new Point2D(centerx, 500));
 		nave.setAlive(true);
 		
 		//Carrega o inimigo
@@ -101,8 +101,8 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		for(int n =0; n<bullets; n++) {
 			bullet[n] = new Sprite(this, g2d);
 			ebullet[n] = new Sprite(this, g2d);
-			bullet[n].load("plasmashot.png");
-			ebullet[n].load("plasmashot.png");
+			bullet[n].load("laserRed.png");
+			ebullet[n].load("laserGreen.png");
 		}
 		
 		//Carrega as explosoes
@@ -250,7 +250,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		//Seta a transformacao para a imagem
 		nave.transform();
 		nave.draw();
-		enemy.setFaceAngle(180);
+		//enemy.setFaceAngle(180);
 		enemy.transform();
 		enemy.draw();	
 	}
@@ -643,7 +643,7 @@ public class GalacticMath extends Applet implements Runnable, KeyListener {
 		
 		//A bullet aponta na mesma direcao que a frente da nave
 		ebullet[currentBullet].setFaceAngle(enemy.faceAngle());
-		ebullet[currentBullet].setMoveAngle(enemy.faceAngle() - 90);
+		ebullet[currentBullet].setMoveAngle(enemy.faceAngle() - 270);
 		
 		//Atira a bullet no angulo da nave
 		double angle = ebullet[currentBullet].moveAngle();
