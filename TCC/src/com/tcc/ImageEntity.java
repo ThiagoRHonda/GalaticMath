@@ -1,27 +1,23 @@
 package com.tcc;
-/*********************************************************
- * Base game image class for bitmapped game entities
- **********************************************************/
+
 import java.awt.*;
 import java.awt.geom.*;
 import java.net.*;
 import java.applet.*;
 
 public class ImageEntity extends BaseGameEntity {
-    //variables
+    //variaveis
     protected Image image;
     protected Applet applet;
     protected AffineTransform at;
     protected Graphics2D g2d;
 
-    //default constructor
+    //construtor padrao
     ImageEntity(Applet a) {
         applet = a;
         setImage(null);
         setAlive(true);
     }
-
-    public Image getImage() { return image; }
 
     public void setImage(Image image) {
         this.image = image;
@@ -30,12 +26,15 @@ public class ImageEntity extends BaseGameEntity {
         at = AffineTransform.getTranslateInstance(x, y);
     }
 
+    //retorna a largura
     public int width() {
         if (image != null)
             return image.getWidth(applet);
         else
             return 0;
     }
+    
+    //retorna a altura
     public int height() {
         if (image != null)
             return image.getHeight(applet);
@@ -43,6 +42,7 @@ public class ImageEntity extends BaseGameEntity {
             return 0;
     }
 
+    //retorna o centro da imagem
     public double getCenterX() {
         return getX() + width() / 2;
     }
@@ -58,14 +58,16 @@ public class ImageEntity extends BaseGameEntity {
         URL url = null;
         try {
             url = this.getClass().getResource(filename);
-            //url = new java.net.URL(applet.getCodeBase() + filename);
-        }
-        //catch (MalformedURLException e) { e.printStackTrace(); }
+        }        
         catch (Exception e) { }
 
         return url;
     }
+    
+    //retorna a imagem
+    public Image getImage() { return image; }
 
+    //carrega a imagem
     public void load(String filename) {
         Toolkit tk = Toolkit.getDefaultToolkit();
         image = tk.getImage(getURL(filename));
@@ -74,7 +76,13 @@ public class ImageEntity extends BaseGameEntity {
         double y = applet.getSize().height/2 - height()/2;
         at = AffineTransform.getTranslateInstance(x, y);
     }
+    
+    //desenha a imagem
+    public void draw() {
+        g2d.drawImage(getImage(), at, applet);
+    }
 
+    //faz transformacoes na imagem
     public void transform() {
         at.setToIdentity();
         at.translate((int)getX() + width()/2, (int)getY() + height()/2);
@@ -82,11 +90,7 @@ public class ImageEntity extends BaseGameEntity {
         at.translate(-width()/2, -height()/2);
     }
 
-    public void draw() {
-        g2d.drawImage(getImage(), at, applet);
-    }
-
-    //bounding rectangle
+    //retangulo limiar
     public Rectangle getBounds() {
         Rectangle r;
         r = new Rectangle((int)getX(), (int)getY(), width(), height());

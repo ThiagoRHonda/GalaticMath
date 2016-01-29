@@ -1,48 +1,44 @@
 package com.tcc;
+
 import javax.sound.sampled.*;
 import java.io.*;
 import java.net.*;
 
 public class SoundClip {
-	//the source for audio data
+	//a fonte do audio
 	private AudioInputStream sample;
 	
-	//sound clip property is read-only here
+	//a propriedade do som é somente leitura
 	private Clip clip;
 	public Clip getClip() { return clip; }
 	
-	//looping property for continuous playback
-	private boolean looping = false;
-	public void setLooping(boolean _looping) { looping = _looping; }
-	public boolean getLooping() { return looping; }
-	
-	//repeat property used to play sound sample multiple times
+	//propriedade de repeticao para tocar o audio varias vezes
 	private int repeat = 0;
 	public void setRepeat(int _repeat) { repeat = _repeat; }
 	public int getRepeat() { return repeat; }
 	
-	//filename property
+	//propriedade do nome do arquivo
 	private String filename = "";
 	public void setFilename(String _filename) { filename = _filename; }
 	public String getFilename() { return filename; }
 	
-	//property to verify when sample is ready
+	//propriedade para verificar se o arquivo esta pronto
 	public boolean isLoaded() {
 		return (boolean)(sample != null);
 	}
 	
-	//constructor
+	//construtor
 	public SoundClip() {
 		try {
-			//create a sound buffer
+			//cria um buffer de som
 			clip = AudioSystem.getClip();
 		} catch (LineUnavailableException e) {}
 	}
 	
-	//this overloaded constructor takes a sound file as a parameter
+	//construtor que recebe um arquivo de audio como parametro
 	public SoundClip(String audiofile) {
-		this(); //call default constructor first
-		load(audiofile); //now load the audio file
+		this(); //chama o construtor padrao
+		load(audiofile); //entao carrega o arquivo de audio
 	}
 	
 	private URL getURL(String filename) {
@@ -54,14 +50,11 @@ public class SoundClip {
 			return url;
 	}
 	
-	//load sound file
+	//carrega o arquivo de som
 	public boolean load(String audiofile) {
 		try {
-			//prepare the input stream for an audio file
 			setFilename(audiofile);
-			//set the audio stream source
 			sample = AudioSystem.getAudioInputStream(getURL(filename));
-			//load the audio file
 			clip.open(sample);
 			return true;
 		} catch (IOException e) {
@@ -73,20 +66,16 @@ public class SoundClip {
 		}
 	}
 	
+	//toca o som
 	public void play() {
-		//exit if the sample hasn´t been loaded
 		if(!isLoaded()) return;
 		
-		//reset the sound clip
 		clip.setFramePosition(0);
 		
-		//play sample with optional looping
-		if(looping)
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
-		else
-			clip.loop(repeat);
+		clip.loop(repeat);
 	}
 	
+	//interrompe o som
 	public void stop() {
 		clip.stop();
 	}

@@ -4,32 +4,32 @@ public class Point2D extends Object {
 	
 	private double x, y;
 	
-	//int constructor
+	//construtor int
 	Point2D(int x, int y) {
 		setX(x);
 		setY(y);
 	}
 	
-	//float constructor
+	//construtor float
 	Point2D(float x, float y) {
 		setX(x);
 		setY(y);
 	}
 		
-	//double constructor
+	//construtor double
 	Point2D(double x, double y) {
 		setX(x);
 		setY(y);
 	}
 	
-	//x property
+	//propriedade do x
 	double X() {return x;}
 	
 	public void setX(double x) {this.x = x;}
 	public void setX(float x) {this.x = (double) x;}
 	public void setX(int x) {this.x = (double) x;}
 	
-	//y property
+	//propriedade do y
 	double Y() {return y;}
 		
 	public void setY(double y) {this.y = y;}

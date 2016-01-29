@@ -2,9 +2,6 @@ package com.tcc;
 
 import java.util.Random;
 
-//import java.applet.*;
-
-
 public class GeradorConta {
 	
 	private Random rand = new Random();
@@ -12,36 +9,29 @@ public class GeradorConta {
 	private int b = 0;
 	private int r = 0;
 	private int m = 0;
-	//private int x = 0;
-	private int c = 0;
-	//private boolean s;
-	//private Scanner input = new Scanner(System.in);
+	
 	String conta;
 	
+	//gera operações de soma
 	public String gSoma() {
-		//int a, b, c;
-		boolean s;
+
 		String conta;
 		
-		a = rand.nextInt(11); b = rand.nextInt(11); c = rand.nextInt(11);
+		a = rand.nextInt(25)+1; b = rand.nextInt(25)+1;
 		
-		s = rand.nextBoolean();
-		if(s == true) {
-			r = a + b;
-			conta = a + " + " + b + " = ";
-		} else {
-			r = a + b + c;
-			conta = a + " + " + b + " + " + c + " = ";
-		}
+		r = a + b;
+		conta = a + " + " + b + " = ";
+
 		
 		return conta;
 	}
 	
+	//gera operações de subtração
 	public String gSub() {
-		//int a, b;
+		
 		String conta;
 		
-		a = rand.nextInt(21); b = rand.nextInt(21);
+		a = rand.nextInt(25)+1; b = rand.nextInt(25)+1;
 		
 		if(a > b) {
 			r = a - b;
@@ -54,28 +44,31 @@ public class GeradorConta {
 		return conta;
 	}
 	
+	
+	//gera operações de divisão
 	public String gDiv() {
-		//int a, b, r;
+
 		String conta2;
 		boolean s;
 		
-		a = rand.nextInt(9)+1; b = rand.nextInt(10)+1;
+		a = rand.nextInt(10)+1; b = rand.nextInt(10)+1;
 		m = a * b;
 		s = rand.nextBoolean();
 		
 		if(s == true) {
 			r = m / b;
-			conta2 = r + " / " + b + " = ";
+			conta2 = m + " / " + b + " = ";
 		} else {
 			r = m / a;
-			conta2 = r + " / " + a + " = ";
+			conta2 = m + " / " + a + " = ";
 		}
 		
 		return conta2;
 	}
 	
+	//gera operações de mulitiplicação
 	public String gMult() {
-		//int a, b;
+
 		String conta2;
 		boolean s;
 		
@@ -93,6 +86,8 @@ public class GeradorConta {
 		return conta2;
 	}
 	
+	
+	//seleciona uma operação aleatoriamente
 	private void randConta() {
 		int c = 0;
 		
@@ -109,30 +104,28 @@ public class GeradorConta {
 		}
 		
 	}
-		
+	
+	
+	//verifica qual operação deve ser retornada
 	public String checkScore(int c) {
 		
-
-			
-			if(c == 0) {
-				conta = gSoma();
-			} else if(c == 1) {
-				conta = gSub();
-			} else if(c == 2) {
-				conta = gDiv();
-			} else if(c == 3) {
-				conta = gMult();
-			} else {
-				randConta();
-			}
-			
-	
-		return conta;
-		
+		if(c == 0) {
+			conta = gSoma();
+		} else if(c == 1) {
+			conta = gSub();
+		} else if(c == 2) {
+			conta = gMult();
+		} else if(c == 3) {
+			conta = gDiv();
+		} else {
+			randConta();
+		}
+				
+		return conta;		
 	}
 	
 	public int result() {
 		return r;
 	}
-
+	
 }
